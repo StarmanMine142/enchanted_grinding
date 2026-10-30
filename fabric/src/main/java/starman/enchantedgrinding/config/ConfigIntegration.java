@@ -1,0 +1,15 @@
+package starman.enchantedgrinding.config;
+
+import com.terraformersmc.modmenu.api.ConfigScreenFactory;
+import com.terraformersmc.modmenu.api.ModMenuApi;
+import net.fabricmc.loader.api.FabricLoader;
+
+public class ConfigIntegration implements ModMenuApi {
+    @Override
+    public ConfigScreenFactory<?> getModConfigScreenFactory() {
+        if (FabricLoader.getInstance().isModLoaded("cloth-config2")) {
+            return EGConfigScreen::createScreen;
+        }
+        return null;
+    }
+}

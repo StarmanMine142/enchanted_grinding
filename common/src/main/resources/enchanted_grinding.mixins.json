@@ -1,0 +1,21 @@
+{
+	"required": true,
+	"package": "starman.enchantedgrinding.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"GrindstoneMenuMixin",
+		"GrindstoneSlot3Mixin",
+		"GrindstoneSlot1Mixin",
+		"GrindstoneSlot2Mixin",
+      "SlotMixin"
+	],
+	"client": [
+		"client.GrindstoneScreenMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}

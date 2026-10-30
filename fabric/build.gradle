@@ -1,0 +1,55 @@
+plugins {
+    id "net.fabricmc.fabric-loom-remap" version "${loom_version}"
+}
+
+configurations {
+    commonJava {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+}
+
+tasks.named("sourcesJar") {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+loom {
+    mixin {
+        defaultRefmapName = "enchanted_grinding.refmap.json"
+    }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings loom.officialMojangMappings()
+
+    commonJava project(path: ':common', configuration: 'commonJava')
+    implementation project(':common')
+
+    modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+    modImplementation "me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}"
+    modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+    modImplementation "maven.modrinth:tax-free-levels:${project.tax_levels_version_fabric}"
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs += configurations.commonJava
+        }
+    }
+}
+
+processResources {
+    from(project(":common").sourceSets.main.resources)
+}
+
+def licenseFile = rootProject.layout.projectDirectory.file("LICENSE")
+def projectName = rootProject.name
+
+tasks.named("jar") {
+    from(licenseFile) {
+        rename { "${it}_${projectName}" }
+    }
+}

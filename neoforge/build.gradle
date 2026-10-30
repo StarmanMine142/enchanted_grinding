@@ -1,0 +1,47 @@
+plugins {
+    id "net.neoforged.moddev" version "${moddev_version}"
+}
+
+configurations {
+    commonJava {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+}
+
+tasks.named("sourcesJar") {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+neoForge {
+    version = project.neoforge_loader_version
+}
+
+dependencies {
+    commonJava project(path: ':common', configuration: 'commonJava')
+    implementation project(':common')
+
+    implementation "me.shedaniel.cloth:cloth-config-neoforge:${project.cloth_config_version}"
+    implementation "maven.modrinth:tax-free-levels:${project.tax_levels_version_neoforge}"
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs += configurations.commonJava
+        }
+    }
+}
+
+processResources {
+    from(project(":common").sourceSets.main.resources)
+}
+
+def licenseFile = rootProject.layout.projectDirectory.file("LICENSE")
+def projectName = rootProject.name
+
+tasks.named("jar") {
+    from(licenseFile) {
+        rename { "${it}_${projectName}" }
+    }
+}
