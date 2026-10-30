@@ -1,0 +1,33 @@
+{
+	"schemaVersion": 1,
+	"id": "${mod_id}",
+	"version": "${mod_version}",
+	"name": "${mod_name}",
+	"description": "${mod_description}",
+	"authors": [
+		"Starman"
+	],
+	"contact": {
+		"sources": "https://github.com/StarmanMine142/enchanted_grinding"
+	},
+	"license": "${mod_license}",
+	"icon": "assets/${mod_id}/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"starman.enchantedgrinding.EnchantedGrinding"
+		],
+		"modmenu": [
+			"starman.enchantedgrinding.config.ModMenuIntegration"
+		]
+	},
+	"mixins": [
+		"${mod_id}.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=${min_loader_version}",
+		"minecraft": "1.21.1",
+		"java": ">=${java_version}",
+		"fabric-api": "*"
+	}
+}

@@ -1,0 +1,61 @@
+plugins {
+	id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
+}
+
+repositories {
+	maven { url "https://maven.shedaniel.me/" }
+	maven { url "https://maven.terraformersmc.com/" }
+	maven { url "https://api.modrinth.com/maven" }
+}
+
+dependencies {
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings loom.officialMojangMappings()
+
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+
+	modImplementation "me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}"
+	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+	modImplementation "maven.modrinth:tax-free-levels:${project.tax_levels_version}"
+}
+
+def resourceTargets = [
+		"mod_id": mod_id,
+		"mod_name": mod_name,
+		"mod_version": mod_version,
+		"mod_description": mod_description,
+		"mod_license": mod_license,
+		"minecraft_version": minecraft_version,
+		"loader_version": loader_version,
+		"min_loader_version": min_loader_version,
+		"java_version": java_version
+]
+
+processResources {
+	inputs.properties(resourceTargets)
+
+	filesMatching("fabric.mod.json") {
+		expand resourceTargets
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = 21
+}
+
+java {
+	withSourcesJar()
+
+	sourceCompatibility = JavaVersion.VERSION_21
+	targetCompatibility = JavaVersion.VERSION_21
+}
+
+jar {
+	def projectName = project.name
+	inputs.property "projectName", projectName
+
+	from("LICENSE") {
+		rename { "${it}_$projectName"}
+	}
+}
