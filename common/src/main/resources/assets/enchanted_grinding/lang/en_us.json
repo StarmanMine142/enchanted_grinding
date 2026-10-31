@@ -3,11 +3,14 @@
   "config.enchanted_grinding.general": "General",
 
   "config.enchanted_grinding.modEnabled": "Mod Enabled",
-  "config.enchanted_grinding.modEnabled.tooltip": "If \"Yes\", mod will work.",
+  "config.enchanted_grinding.modEnabled.tooltip": "If \"ON\", mod will work.",
   "config.enchanted_grinding.xpConsume": "XP Consume",
-  "config.enchanted_grinding.xpConsume.tooltip": "If \"Yes\", moving enchantments from equipment to books consumes experience.",
+  "config.enchanted_grinding.xpConsume.tooltip": "If \"ON\", moving enchantments from equipment to books consumes experience.",
   "config.enchanted_grinding.ignoreCurses": "Ignore Curses",
-  "config.enchanted_grinding.ignoreCurses.tooltip": "If \"Yes\", curses will not move from equipment to books.",
+  "config.enchanted_grinding.ignoreCurses.tooltip": "If \"ON\", curses will not move from equipment to books.",
+
+  "config.enchanted_grinding.saveAndQuit": "Save and Quit",
+  "config.enchanted_grinding.pleaseSave": "Please, save changes",
 
   "modmenu.descriptionTranslation.enchanted_grinding": "Allow to move enchantments from equipment to books!"
 }

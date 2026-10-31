@@ -19,53 +19,60 @@ public class GrindstoneSlot3Mixin {
 
     @WrapMethod(method = "onTake")
     private void eg$wrapOnTake(Player player, ItemStack stack, Operation<Void> original) {
-        if (EGConfigManager.get().modEnabled
-                && stack.is(Items.ENCHANTED_BOOK)
-                && player.containerMenu instanceof GrindstoneMenu menu) {
-
-            ItemStack a = menu.getSlot(0).getItem();
-            ItemStack b = menu.getSlot(1).getItem();
-
-            ItemStack enchantedItem = null;
-            int enchSlot = -1;
-            int bookSlot = -1;
-
-            if (a.is(Items.BOOK) && isEnchantedNonBook(b)) {
-                enchantedItem = b; enchSlot = 1; bookSlot = 0;
-            } else if (b.is(Items.BOOK) && isEnchantedNonBook(a)) {
-                enchantedItem = a; enchSlot = 0; bookSlot = 1;
-            }
-
-            if (enchantedItem != null) {
-                if (EGConfigManager.get().xpConsume && !player.hasInfiniteMaterials()) {
-                    int cost = EnchantedGrindingCost.getLevelCost(enchantedItem);
-                    if (cost > 0) TaxFreeLevelsCompat.applyFlattenedCost(player, cost);
-                }
-
-                ItemStack restored = enchantedItem.copy();
-                if (EGConfigManager.get().ignoreCurses) {
-                    EnchantmentHelper.updateEnchantments(restored,
-                            m -> m.removeIf(h -> !h.is(EnchantmentTags.CURSE)));
-                } else {
-                    EnchantmentHelper.updateEnchantments(restored,
-                            m -> m.removeIf(h -> true));
-                }
-
-                ItemStack books = menu.getSlot(bookSlot).getItem();
-                ItemStack leftBooks = books.getCount() > 1
-                        ? books.copyWithCount(books.getCount() - 1)
-                        : ItemStack.EMPTY;
-
-                menu.getSlot(enchSlot).set(restored);
-                menu.getSlot(bookSlot).set(leftBooks);
-
-                player.level().levelEvent(1042, player.blockPosition(), 0);
-
-                return;
-            }
+        if (!EGConfigManager.get().modEnabled) {
+            original.call(player, stack);
+            return;
         }
 
-        original.call(player, stack);
+        if (!(player.containerMenu instanceof GrindstoneMenu menu)) {
+            original.call(player, stack);
+            return;
+        }
+
+        ItemStack a = menu.getSlot(0).getItem();
+        ItemStack b = menu.getSlot(1).getItem();
+
+        ItemStack enchantedItem = null;
+        int enchSlot = -1;
+        int bookSlot = -1;
+
+        if (a.is(Items.BOOK) && isEnchantedNonBook(b)) {
+            enchantedItem = b;
+            enchSlot = 1;
+            bookSlot = 0;
+        } else if (b.is(Items.BOOK) && isEnchantedNonBook(a)) {
+            enchantedItem = a;
+            enchSlot = 0;
+            bookSlot = 1;
+        }
+
+        if (enchantedItem == null) {
+            original.call(player, stack);
+            return;
+        }
+        if (EGConfigManager.get().xpConsume && !player.hasInfiniteMaterials()) {
+            int cost = EnchantedGrindingCost.getLevelCost(enchantedItem);
+            if (cost > 0) TaxFreeLevelsCompat.applyFlattenedCost(player, cost);
+        }
+
+        ItemStack restored = enchantedItem.copy();
+        if (EGConfigManager.get().ignoreCurses) {
+            EnchantmentHelper.updateEnchantments(restored,
+                    m -> m.removeIf(h -> !h.is(EnchantmentTags.CURSE)));
+        } else {
+            EnchantmentHelper.updateEnchantments(restored,
+                    m -> m.removeIf(h -> true));
+        }
+
+        ItemStack books = menu.getSlot(bookSlot).getItem();
+        ItemStack leftBooks = books.getCount() > 1
+                ? books.copyWithCount(books.getCount() - 1)
+                : ItemStack.EMPTY;
+
+        menu.getSlot(enchSlot).set(restored);
+        menu.getSlot(bookSlot).set(leftBooks);
+
+        player.level().levelEvent(1042, player.blockPosition(), 0);
     }
 
     @Unique

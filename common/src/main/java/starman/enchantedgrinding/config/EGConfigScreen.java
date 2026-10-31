@@ -1,49 +1,104 @@
 package starman.enchantedgrinding.config;
 
-import me.shedaniel.clothconfig2.api.ConfigBuilder;
-import me.shedaniel.clothconfig2.api.ConfigCategory;
-import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
-public class EGConfigScreen {
+import java.util.function.BooleanSupplier;
+import java.util.function.Consumer;
+
+public class EGConfigScreen extends Screen {
+    private static final String PREFIX = "config.enchanted_grinding.";
+
+    private final Screen parent;
+    private final EGConfig config = EGConfigManager.get();
+
+    private final boolean initialModEnabled = config.modEnabled;
+    private final boolean initialXpConsume = config.xpConsume;
+    private final boolean initialIgnoreCurses = config.ignoreCurses;
+
+    private boolean hasUnsavedChanges = false;
+    private boolean showWarning = false;
+
+    protected EGConfigScreen(Screen parent) {
+        super(Component.translatable(PREFIX + "title"));
+        this.parent = parent;
+    }
+
     public static Screen createScreen(Screen parent) {
-        ConfigBuilder builder = ConfigBuilder.create()
-                .setParentScreen(parent)
-                .setTitle(Component.translatable("config.enchanted_grinding.title"));
+        return new EGConfigScreen(parent);
+    }
 
-        EGConfig config = EGConfigManager.get();
+    @Override
+    protected void init() {
+        int x = this.width / 2 - 100;
+        int y = this.height / 2 - 60;
 
-        ConfigCategory general = builder.getOrCreateCategory(Component.translatable("config.enchanted_grinding.general"));
-        ConfigEntryBuilder entryBuilder = builder.entryBuilder();
+        toggleButton(x, y, "modEnabled", () -> config.modEnabled, v -> config.modEnabled = v);
+        toggleButton(x, y + 24, "xpConsume", () -> config.xpConsume, v -> config.xpConsume = v);
+        toggleButton(x, y + 48, "ignoreCurses",() -> config.ignoreCurses,v -> config.ignoreCurses = v);
 
-        general.addEntry(entryBuilder.startBooleanToggle(
-                        Component.translatable("config.enchanted_grinding.modEnabled"),
-                        config.modEnabled)
-                .setDefaultValue(true)
-                .setTooltip(Component.translatable("config.enchanted_grinding.modEnabled.tooltip"))
-                .setSaveConsumer(newValue -> config.modEnabled = newValue)
-                .build());
+        this.addRenderableWidget(Button.builder(
+                        Component.translatable(PREFIX + "saveAndQuit"), b -> {
+                            EGConfigManager.save();
+                            this.hasUnsavedChanges = false;
+                            this.showWarning = false;
+                            this.minecraft.setScreen(parent);
+                        })
+                .pos((this.width - 200) / 2, this.height - 26).size(200, 20).build());
+    }
 
-        general.addEntry(entryBuilder.startBooleanToggle(
-                        Component.translatable("config.enchanted_grinding.xpConsume"),
-                        config.xpConsume)
-                .setDefaultValue(true)
-                .setTooltip(Component.translatable("config.enchanted_grinding.xpConsume.tooltip"))
-                .setSaveConsumer(newValue -> config.xpConsume = newValue)
-                .build());
+    @Override
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+        this.renderBackground(graphics, mouseX, mouseY, delta);
+        super.render(graphics, mouseX, mouseY, delta);
+        graphics.drawCenteredString(this.font, this.title, this.width / 2, 20, 0xFFFFFF);
 
+        if (this.showWarning) {
+            graphics.drawCenteredString(this.font,
+                    Component.translatable(PREFIX + "pleaseSave").withStyle(ChatFormatting.RED),
+                    this.width / 2, this.height - 26 - 14, 0xFF5555);
+        }
+    }
 
-        general.addEntry(entryBuilder.startBooleanToggle(
-                        Component.translatable("config.enchanted_grinding.ignoreCurses"),
-                        config.ignoreCurses)
-                .setDefaultValue(true)
-                .setTooltip(Component.translatable("config.enchanted_grinding.ignoreCurses.tooltip"))
-                .setSaveConsumer(newValue -> config.ignoreCurses = newValue)
-                .build());
+    private void toggleButton(int x, int y, String key, BooleanSupplier getter, Consumer<Boolean> setter) {
+        Component status = getter.getAsBoolean()
+                ? Component.translatable("options.on")
+                : Component.translatable("options.off");
 
-        builder.setSavingRunnable(EGConfigManager::save);
+        Button button = Button.builder(
+                        Component.translatable(PREFIX + key).append(": ").append(status),
+                        b -> {
+                            setter.accept(!getter.getAsBoolean());
+                            this.markChanged();
+                        })
+                .pos(x, y).size(200, 20).build();
 
-        return builder.build();
+        button.setTooltip(Tooltip.create(Component.translatable(PREFIX + key + ".tooltip")));
+        this.addRenderableWidget(button);
+    }
+
+    private void markChanged() {
+        this.hasUnsavedChanges = true;
+        this.showWarning = false;
+        this.clearWidgets();
+        this.init();
+    }
+
+    @Override
+    public void onClose() {
+        if (this.hasUnsavedChanges && !this.showWarning) {
+            this.showWarning = true;
+            return;
+        }
+        if (this.hasUnsavedChanges) {
+            config.modEnabled = this.initialModEnabled;
+            config.xpConsume = this.initialXpConsume;
+            config.ignoreCurses = this.initialIgnoreCurses;
+        }
+        this.minecraft.setScreen(parent);
     }
 }

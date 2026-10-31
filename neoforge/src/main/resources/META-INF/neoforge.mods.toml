@@ -8,9 +8,9 @@ modId = "${mod_id}"
 version = "${mod_version}"
 displayName = "${mod_name}"
 authors = "Starman"
-description = '''${mod_description}'''
+description = "${mod_description}"
 logoFile = "assets/${mod_id}/icon.png"
-displayURL = "https://github.com/StarmanMine142/enchanted_grinding"
+displayURL = "https://modrinth.com/mod/enchanted_grinding"
 
 [[dependencies.${mod_id}]]
 modId = "neoforge"

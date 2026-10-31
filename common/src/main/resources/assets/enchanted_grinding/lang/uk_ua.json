@@ -3,11 +3,14 @@
   "config.enchanted_grinding.general": "Загальні",
 
   "config.enchanted_grinding.modEnabled": "Мод увімкнено",
-  "config.enchanted_grinding.modEnabled.tooltip": "Якщо «Так», мод буде працювати.",
+  "config.enchanted_grinding.modEnabled.tooltip": "Якщо «УВІМК.», мод буде працювати.",
   "config.enchanted_grinding.xpConsume": "Споживання досвіду",
-  "config.enchanted_grinding.xpConsume.tooltip": "Якщо «Так», перенесення чарів зі спорядження на книги споживатиме досвід.",
+  "config.enchanted_grinding.xpConsume.tooltip": "Якщо «УВІМК.», перенесення чарів зі спорядження на книги споживатиме досвід.",
   "config.enchanted_grinding.ignoreCurses": "Ігнорувати прокляття",
-  "config.enchanted_grinding.ignoreCurses.tooltip": "Якщо «Так», прокляття не буде перенесено зі спорядження на книги.",
+  "config.enchanted_grinding.ignoreCurses.tooltip": "Якщо «УВІМК.», прокляття не буде перенесено зі спорядження на книги.",
+
+  "config.enchanted_grinding.saveAndQuit": "Зберегти та вийти",
+  "config.enchanted_grinding.pleaseSave": "Будь ласка, збережіть зміни",
 
   "modmenu.descriptionTranslation.enchanted_grinding": "Дозволяє переносити чари зі спорядження на книги!"
 }

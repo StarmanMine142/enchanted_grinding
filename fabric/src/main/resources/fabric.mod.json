@@ -8,6 +8,7 @@
 		"Starman"
 	],
 	"contact": {
+		"homepage": "https://modrinth.com/mod/enchanted_grinding",
 		"sources": "https://github.com/StarmanMine142/enchanted_grinding",
 		"issues": "https://github.com/StarmanMine142/enchanted_grinding/issues"
 	},

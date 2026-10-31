@@ -21,8 +21,7 @@ dependencies {
     commonJava project(path: ':common', configuration: 'commonJava')
     implementation project(':common')
 
-    implementation "me.shedaniel.cloth:cloth-config-neoforge:${project.cloth_config_version}"
-    implementation "maven.modrinth:tax-free-levels:${project.tax_levels_version_neoforge}"
+    compileOnly "maven.modrinth:tax-free-levels:${project.tax_levels_version_neoforge}"
 }
 
 sourceSets {

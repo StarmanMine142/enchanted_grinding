@@ -10,3 +10,5 @@ Not a single line of code was taken from Grind Enchantments.
 ## FAQ
 - New versions support?<br>
   In the future mod will be ported to 26.x and later
+- Old versions support?<br>
+  Currently backporting not planed

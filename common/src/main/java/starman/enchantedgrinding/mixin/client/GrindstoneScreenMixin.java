@@ -26,7 +26,6 @@ public class GrindstoneScreenMixin {
 
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) return;
-        if (player.hasInfiniteMaterials()) return;
 
         GrindstoneScreen screen = (GrindstoneScreen)(Object) this;
         GrindstoneMenu menu = screen.getMenu();
@@ -47,11 +46,11 @@ public class GrindstoneScreenMixin {
 
         Component text = Component.translatable("container.repair.cost", cost);
         int color = 8453920;
-        if (player.experienceLevel < cost) {
+        if (!player.hasInfiniteMaterials() && player.experienceLevel < cost) {
             color = 16736352;
         }
 
-        int x = screen.width / 2 - 21;
+        int x = screen.width / 2 - 17;
         int y = screen.height / 2 - 10;
 
         int width = Minecraft.getInstance().font.width(text);

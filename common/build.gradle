@@ -16,12 +16,10 @@ dependencies {
 
     compileOnly "io.github.llamalad7:mixinextras-common:0.5.5"
 
-    compileOnly "me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}"
     modCompileOnly "maven.modrinth:tax-free-levels:${project.tax_levels_version_fabric}"
 }
 
 tasks.configureEach { enabled = false }
-
 
 configurations {
     commonJava {
