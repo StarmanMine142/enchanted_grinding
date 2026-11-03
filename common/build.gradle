@@ -1,0 +1,39 @@
+plugins {
+    id "net.fabricmc.fabric-loom" version "${loom_version}"
+}
+
+repositories {
+    maven { url = "https://maven.fabricmc.net/" }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+
+    compileOnly "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
+
+    compileOnly "net.fabricmc:sponge-mixin:0.15.3+mixin.0.8.7"
+    annotationProcessor "net.fabricmc:sponge-mixin:0.15.3+mixin.0.8.7"
+
+    compileOnly "io.github.llamalad7:mixinextras-common:0.5.5"
+
+    compileOnly "maven.modrinth:tax-free-levels:${project.tax_levels_version_fabric}"
+}
+
+tasks.configureEach { enabled = false }
+
+configurations {
+    commonJava {
+        canBeResolved = false
+        canBeConsumed = true
+    }
+}
+
+loom {
+    mixin {
+        useLegacyMixinAp = false
+    }
+}
+
+artifacts {
+    commonJava sourceSets.main.java.sourceDirectories.singleFile
+}

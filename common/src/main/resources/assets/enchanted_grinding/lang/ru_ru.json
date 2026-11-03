@@ -1,0 +1,17 @@
+{
+  "config.enchanted_grinding.title": "Настройки Enchanted Grinding",
+  "config.enchanted_grinding.general": "Общие",
+
+  "config.enchanted_grinding.modEnabled": "Мод включён",
+  "config.enchanted_grinding.modEnabled.tooltip": "Если «Вкл», мод будет работать.",
+  "config.enchanted_grinding.xpConsume": "Потребление опыта",
+  "config.enchanted_grinding.xpConsume.tooltip": "Если «Вкл», перенос чаров со снаряжения на книги будет потреблять опыт.",
+  "config.enchanted_grinding.ignoreCurses": "Игнорить проклятия",
+  "config.enchanted_grinding.ignoreCurses.tooltip": "Если «Вкл», проклятия не будет перенесено со снаряжения на книги.",
+
+  "config.enchanted_grinding.saveAndQuit": "Сохранить и выйти",
+  "config.enchanted_grinding.pleaseSave": "Пожалуйста, сохраните изменения",
+
+  "modmenu.descriptionTranslation.enchanted_grinding": "Позволяет переносить чары со снаряжения на книги!",
+  "fml.menu.mods.info.description.descriptionenchanted_grinding": "Позволяет переносить чары со снаряжения на книги!"
+}

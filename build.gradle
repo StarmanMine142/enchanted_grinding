@@ -1,0 +1,66 @@
+subprojects {
+	apply plugin: "java"
+
+	java {
+		sourceCompatibility = JavaVersion.VERSION_25
+		targetCompatibility = JavaVersion.VERSION_25
+		withSourcesJar()
+	}
+
+	tasks.withType(JavaCompile).configureEach {
+		it.options.release = 25
+	}
+
+	tasks.withType(AbstractArchiveTask).configureEach {
+		destinationDirectory = rootProject.layout.buildDirectory.dir("libs")
+	}
+
+	tasks.withType(Jar).configureEach {
+		duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+	}
+
+	tasks.withType(Copy).configureEach {
+		duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+	}
+
+	repositories {
+		maven { url = "https://maven.terraformersmc.com/" }
+		maven { url = "https://api.modrinth.com/maven" }
+	}
+
+	processResources {
+		def props = [
+				"mod_id": mod_id,
+				"mod_name": mod_name,
+				"mod_version": mod_version,
+				"mod_description": mod_description,
+				"mod_license": mod_license,
+				"minecraft_version": minecraft_version,
+				"fabric_loader_version": fabric_loader_version,
+				"fabric_loader_min_version": fabric_loader_min_version,
+				"neoforge_loader_version": neoforge_loader_version,
+				"neoforge_loader_min_version": neoforge_loader_min_version,
+				"java_version": java_version
+		]
+		inputs.properties(props)
+
+		filesMatching("fabric.mod.json") {
+			expand props
+		}
+		filesMatching("META-INF/neoforge.mods.toml") {
+			expand props
+		}
+	}
+}
+
+project(":fabric") {
+	base {
+		archivesName = "${project.mod_id}-${project.mod_version}-${project.minecraft_version}-fabric"
+	}
+}
+
+project(":neoforge") {
+	base {
+		archivesName = "${project.mod_id}-${project.mod_version}-${project.minecraft_version}-neoforge"
+	}
+}
